@@ -60,12 +60,9 @@ app.get("/api/wait", function(req, res) {
   res.sendFile(path.join(__dirname, "./wait.json"));
 });
 app.post("/make", function(req, res) {
-  let reservation = {
-    customerName: "Tyler Pho",
-    phoneNumber: "8019465454",
-    customerEmail: "Tyler.phopho@gmail.com",
-    customerID: "3675"
-    }
+  let reservation = req.body;
+  
+  
   //pull in database
   fs.readFile('./tables.json', "utf-8", (err, data) => {
     if (err) throw err;
