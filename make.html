@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Reservation Page</title>
+
+        <!-- Latest compiled and minified CSS & JS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://code.jquery.com/jquery.js"></script>
+
+
+    </head>
+
+    <body>
+        <section class="hero is-dark">
+            <div class="hero-body has-text-centered">
+                <div class="container">
+                    <h1 class="title">
+                        <span class="fa fa-fire"></span> Hot Restaurant
+                    </h1>
+                    <br>
+                    <h2 class="subtitle">
+                        Make your reservation
+                    </h2>
+                    <hr>
+
+                    <div class="field is-grouped has-addons">
+                        <p class="control">
+                            <a href="/tables" class="button is-warning is-outlined">
+                                <span class="fa fa-list-alt"></span> View
+                                Tables
+                            </a>
+                        </p>
+                        <p class="control">
+                            <a href="/" class=" button is-primary is-outlined">
+                                <span class="fa fa-home"></span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <label for="card-header" class="label">
+                                <h1 class="subtitle">Table Reservation</h1>
+                            </label>
+                        </div>
+                        <div class="field">
+                            <label for="reserve-name" class="label">Name</label>
+                            <p class="control">
+                                <input class="input" type="text" placeholder="Name" id="reserve-name">
+                            </p>
+                        </div>
+
+                        <div class="field">
+                            <label for="reserve-phone" class="label">Phone Number</label>
+                            <p class="control">
+                                <input class="input is-success" type="text" placeholder="Phone Number">
+                            </p>
+                        </div>
+
+                        <div class="field">
+                            <label for="reserve-email" class="label">Email</label>
+                            <p class="control">
+                                <input class="input is-danger" type="text" placeholder="Email input">
+                            </p>
+                        </div>
+
+                        <div class="field">
+                            <label for="reserve-unique-id" class="label">Unique ID</label>
+                            <p class="control">
+                                <input class="input is-danger" type="text" placeholder="ID">
+                            </p>
+                        </div>
+
+
+
+
+
+                        <div class="field is-grouped">
+                            <p class="control">
+                                <button class="button is-primary">Submit</button>
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <footer class="footer">
+            <div class="container">
+                <p>
+                    <a href="/api/tables">API Table Link</a> |
+                    <a href="/api/waitlist">API Wait List</a>
+                </p>
+            </div>
+        </footer>
+
+        </div>
+
+
+
+
+
+        <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS SENT TO OUR SERVER -->
+        <script type="text/javascript">
+            // In this code below we create the Front-end JavaScript which "POSTS" our form data to our express server.
+            // In essence, when the user hits submit, jQuery grabs all of the fields then sends a post request to our api
+            // Our api recognizes the route (/api/tables)... and then runs the associated code (found in api-routes.js).
+            // In this case the associated code "saves" the data to the table-data.js file or waitinglist-data.js file
+
+            $(".submit").on("click", function (event) {
+                event.preventDefault();
+
+                // Here we grab the form elements
+                var newReservation = {
+                    customerName: $("#reserve-name").val().trim(),
+                    phoneNumber: $("#reserve-phone").val().trim(),
+                    customerEmail: $("#reserve-email").val().trim(),
+                    customerID: $("#reserve-unique-id").val().trim()
+                };
+
+                console.log(newReservation);
+
+                // This line is the magic. It"s very similar to the standard ajax function we used.
+                // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
+                // The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
+                // depending on if a tables is available or not.
+
+                $.post("/api/tables", newReservation,
+                    function (data) {
+
+                        // If a table is available... tell user they are booked.
+                        if (data) {
+                            alert("Yay! You are officially booked!");
+                        }
+
+                        // If a table is available... tell user they on the waiting list.
+                        else {
+                            alert("Sorry you are on the wait list");
+                        }
+
+                        // Clear the form when submitting
+                        $("#reserve-name").val("");
+                        $("#reserve-phone").val("");
+                        $("#reserve-email").val("");
+                        $("#reserve-unique-id").val("");
+
+                    });
+
+            });
+
+        </script>
+    </body>
+
+</html>
