@@ -79,15 +79,21 @@ app.post("/make", function(req, res) {
       // console.log(wait);
       wait.push(reservation);
       console.log(wait);
+      fs.writeFile("./wait.json", JSON.stringify(wait), function(err) {
+        if (err) throw err;
+        //returns status and message as response
+        return res.status(200).send("reservation received");
+      });
+      
     })
     console.log("No tables available", tables.length);
       
-     tables.push(reservation);
-    fs.writeFile("./tables.json", JSON.stringify(tables), function(err){
-      if (err) throw err;
-      //returns status and message as response
-      return res.status(200).send("reservation received");
-    })
+    //  wait.push(reservation);
+    // fs.writeFile("./wait.json", JSON.stringify(wait), function(err){
+    //   if (err) throw err;
+    //   //returns status and message as response
+    //   return res.status(200).send("reservation received");
+    // })
   }else{
     console.log("Tables are available", tables.length);
     tables.push(reservation);
